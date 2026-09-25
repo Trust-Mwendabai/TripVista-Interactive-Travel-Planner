@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trip Planner · TripVista</title>
+<link rel="stylesheet" href="css/style.css">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('tv-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="index.html"><span aria-hidden="true">✈</span> TripVista</a>
+  <button class="icon-btn burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+  <nav class="nav-links" id="navLinks" aria-label="Main">
+    <a href="index.html">Home</a>
+    <a href="index.html#gallery">Gallery</a>
+    <button class="btn sm" id="printBtn">🖨️ Print plan</button>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme">🌓</button>
+  </nav>
+</header>
+
+<main class="pwrap">
+  <div class="summary" id="summary" aria-live="polite"></div>
+  <div class="tabs no-print" id="tabs" role="tablist">
+    <button class="tab active" role="tab" data-tab="explore">🧭 Explore</button>
+    <button class="tab" role="tab" data-tab="trip">🗺️ My trip <span class="count" id="cTrip">0</span></button>
+    <button class="tab" role="tab" data-tab="itinerary">🗓️ Itinerary</button>
+    <button class="tab" role="tab" data-tab="budget">💰 Budget</button>
+    <button class="tab" role="tab" data-tab="checklist">🧳 Checklist</button>
+    <button class="tab" role="tab" data-tab="favs">❤️ Favourites <span class="count" id="cFav">0</span></button>
+  </div>
+
+  <!-- Explore -->
+  <section class="panel" id="p-explore" role="tabpanel">
+    <div class="filters">
+      <label class="f grow">Search<input type="search" id="q" placeholder="City, country or activity…"></label>
+      <label class="f">Type<select id="fCat"><option value="">All types</option></select></label>
+      <label class="f">Max cost / day<select id="fBudget"><option value="0">Any budget</option><option value="100">Up to $100</option><option value="150">Up to $150</option><option value="250">Up to $250</option></select></label>
+      <label class="f">Sort<select id="fSort"><option value="name">Name</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label>
+    </div>
+    <div class="dgrid" id="exploreGrid"></div>
+  </section>
+
+  <!-- Trip setup -->
+  <section class="panel" id="p-trip" role="tabpanel" hidden>
+    <div class="split">
+      <div class="card">
+        <h2>🧭 Trip details</h2>
+        <label class="f">Trip name<input type="text" id="tName" maxlength="50" placeholder="e.g. Summer holiday"></label>
+        <div class="row">
+          <label class="f">Start date<input type="date" id="tStart"></label>
+          <label class="f">Days<input type="number" id="tDays" min="1" max="30"></label>
+        </div>
+        <div class="row">
+          <label class="f">Travellers<input type="number" id="tTrav" min="1" max="20"></label>
+          <label class="f">Flights / person ($)<input type="number" id="tFlight" min="0" step="10"></label>
+        </div>
+        <label class="f">Total budget limit ($, optional)<input type="number" id="tBudget" min="0" step="100"></label>
+        <button class="btn danger sm" id="resetTrip">Reset trip</button>
+      </div>
+      <div class="card">
+        <h2>📍 Destinations in this trip <span class="muted" id="allocNote"></span></h2>
+        <div class="list" id="tripList"></div>
+        <p class="hint">Set how many days you spend in each place. The budget and itinerary use this split.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Itinerary -->
+  <section class="panel" id="p-itinerary" role="tabpanel" hidden>
+    <div class="card">
+      <h2>🗓️ Daily itinerary <span class="muted" id="dayTotal"></span></h2>
+      <div class="daytabs" id="dayTabs"></div>
+      <div class="muted" id="dayHead"></div>
+      <form class="row no-print" id="actForm" style="align-items:end">
+        <label class="f" style="flex:3 1 200px">Activity<input type="text" id="aTitle" maxlength="80" placeholder="What are you doing?" required></label>
+        <label class="f">Time<input type="time" id="aTime" value="09:00"></label>
+        <label class="f">Cost / person ($)<input type="number" id="aCost" min="0" step="1" value="0"></label>
+        <button class="btn primary" style="flex:0 0 auto">Add</button>
+      </form>
+      <div class="no-print"><div class="hint" style="margin-bottom:.4rem">Quick add from your destinations:</div><div class="chips" id="suggest"></div></div>
+      <ul class="acts" id="actList"></ul>
+    </div>
+  </section>
+
+  <!-- Budget -->
+  <section class="panel" id="p-budget" role="tabpanel" hidden>
+    <div class="split">
+      <div class="card">
+        <h2>💰 Estimated total</h2>
+        <div class="big" id="bTotal">$0</div>
+        <div class="muted" id="bPer"></div>
+        <div id="bStatus"></div>
+        <p class="hint">Estimates use average daily prices per person. Activities come from your itinerary. A 10% buffer covers surprises.</p>
+      </div>
+      <div class="card"><h2>Breakdown</h2><div class="bars" id="bBars"></div></div>
+    </div>
+  </section>
+
+  <!-- Checklist -->
+  <section class="panel" id="p-checklist" role="tabpanel" hidden>
+    <div class="card">
+      <h2>🧳 Travel checklist <span class="muted" id="clCount"></span></h2>
+      <div class="progress"><div id="clBar"></div></div>
+      <form class="row no-print" id="clForm"><input type="text" id="clText" maxlength="60" placeholder="Add your own item…" aria-label="Custom checklist item" style="flex:3 1 200px"><button class="btn primary" style="flex:0 0 auto">Add item</button></form>
+      <div id="clList"></div>
+    </div>
+  </section>
+
+  <!-- Favourites -->
+  <section class="panel" id="p-favs" role="tabpanel" hidden>
+    <div class="dgrid" id="favGrid"></div>
+  </section>
+</main>
+<footer class="site">
+  <p>TripVista · Plans are stored locally in your browser · Prices are rough estimates</p>
+  <p><strong>John Malasha</strong> · SIN: 2512140773</p>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/shared.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

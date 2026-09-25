@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TripVista · Interactive Travel Planner</title>
+<meta name="description" content="Plan trips visually: pick destinations, build daily itineraries, estimate your budget and generate a packing checklist.">
+<link rel="stylesheet" href="css/style.css">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('tv-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="index.html"><span aria-hidden="true">✈</span> TripVista</a>
+  <button class="icon-btn burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+  <nav class="nav-links" id="navLinks" aria-label="Main">
+    <a href="#destinations">Destinations</a>
+    <a href="#how">How it works</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#features">Features</a>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme">🌓</button>
+    <a class="btn primary sm" href="planner.html">Plan a trip</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <div class="badge">🌍 Free · Private · No sign-up</div>
+    <h1>Plan your next <em>adventure</em> in minutes.</h1>
+    <p>Pick destinations, build a day-by-day itinerary, estimate costs and get a smart packing checklist — all in one beautiful planner.</p>
+    <a class="btn sunset" href="planner.html">Start planning →</a>
+    <a class="btn ghost" href="#destinations">Explore destinations</a>
+    <div class="hero-stats">
+      <div><b id="statDest">12</b><span>Destinations</span></div>
+      <div><b>4</b><span>Planning tools</span></div>
+      <div><b>100%</b><span>Saved on your device</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="destinations">
+    <div class="section-head reveal"><h2>Popular destinations</h2><p>Tap a card for details, save your favourites, or add it straight to your trip.</p></div>
+    <div class="dgrid" id="featured"></div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section-head reveal"><h2>How TripVista works</h2><p>From idea to ready-to-go in four simple steps.</p></div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h3>Choose destinations</h3><p>Search and filter by type, budget and season, then add places to your trip.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>Build your itinerary</h3><p>Add activities to each day with times and costs.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>Estimate the budget</h3><p>See a live cost breakdown for your group and stay within your limit.</p></div>
+      <div class="step reveal"><div class="n">4</div><h3>Pack with confidence</h3><p>Get a checklist tailored to your destinations and trip length.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="section-head reveal"><h2>Destination gallery</h2><p>Get inspired. Select any tile to see highlights and estimated costs.</p></div>
+    <div class="gallery" id="gallery-grid"></div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-head reveal"><h2>Everything a trip needs</h2></div>
+    <div class="features">
+      <article class="feature reveal"><div class="ico">🗓️</div><h3>Daily itineraries</h3><p>Plan each day with timed activities, automatically sorted.</p></article>
+      <article class="feature reveal"><div class="ico">💰</div><h3>Budget calculator</h3><p>Flights, stay, food, transport and activities for the whole group.</p></article>
+      <article class="feature reveal"><div class="ico">❤️</div><h3>Favourites</h3><p>Save places you love and come back to them later.</p></article>
+      <article class="feature reveal"><div class="ico">🧳</div><h3>Smart checklist</h3><p>Packing items that adapt to beaches, cities, cold weather and more.</p></article>
+      <article class="feature reveal"><div class="ico">🔎</div><h3>Search &amp; filters</h3><p>Filter by category and daily budget, and sort by price or name.</p></article>
+      <article class="feature reveal"><div class="ico">🌗</div><h3>Light &amp; dark mode</h3><p>Comfortable on any screen, day or night, on any device.</p></article>
+    </div>
+  </section>
+
+  <section class="cta reveal">
+    <h2>Where to next?</h2>
+    <p>Your plan is saved in your browser, so you can come back and keep building.</p>
+    <a class="btn" href="planner.html">Open the trip planner →</a>
+  </section>
+</main>
+<footer class="site">
+  <p>TripVista · Built with HTML5, CSS3 and JavaScript · Plans stored locally in your browser</p>
+  <p><strong>John Malasha</strong> · SIN: 2512140773</p>
+</footer>
+<script src="js/data.js"></script>
+<script src="js/shared.js"></script>
+<script src="js/landing.js"></script>
+</body>
+</html>
