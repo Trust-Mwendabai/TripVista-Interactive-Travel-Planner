@@ -49,8 +49,8 @@
     for (let day = 1; day <= T.days; day++) (T.itin[day] || []).forEach(a => { act += a.cost; });
     const buffer = (per.stay + per.food + per.transport + act) * 0.1;
     const n = T.travelers;
-    const lines = [['✈️ Flights', T.flight * n, '#0ea5e9'], ['🏨 Accommodation', per.stay * n, '#14b8a6'], ['🍽️ Food', per.food * n, '#f59e0b'], ['🚌 Local transport', per.transport * n, '#8b5cf6'], ['🎟️ Activities', act * n, '#ec4899'], ['🛟 Buffer (10%)', buffer * n, '#94a3b8']];
-    const total = lines.reduce((a, l) => a + l[1], 0);
+    const lines = [['plane', 'Flights', T.flight * n, '#0ea5e9'], ['bed', 'Accommodation', per.stay * n, '#14b8a6'], ['utensils', 'Food', per.food * n, '#f59e0b'], ['bus', 'Local transport', per.transport * n, '#8b5cf6'], ['ticket', 'Activities', act * n, '#ec4899'], ['buoy', 'Buffer (10%)', buffer * n, '#94a3b8']];
+    const total = lines.reduce((a, l) => a + l[2], 0);
     return { lines, total };
   }
 
@@ -84,9 +84,9 @@
     const { total } = budget(), items = checklistItems(), done = items.filter(i => T.done[i.key]).length;
     const over = T.budget && total > T.budget;
     $('#summary').innerHTML = [
-      ['Destinations', T.selected.length], ['Days', T.days], ['Travellers', T.travelers],
-      ['Est. total', money(total), over ? 'over' : ''], ['Packed', `${done}/${items.length}`]
-    ].map(([l, v, c]) => `<div class="sum ${c || ''}"><b>${v}</b><span class="muted">${l}</span></div>`).join('');
+      ['pin', 'Destinations', T.selected.length], ['calendar', 'Days', T.days], ['users', 'Travellers', T.travelers],
+      ['wallet', 'Est. total', money(total), over ? 'over' : ''], ['list-checks', 'Packed', `${done}/${items.length}`]
+    ].map(([i, l, v, c]) => `<div class="sum ${c || ''}"><div class="ico">${ic(i)}</div><div><b>${v}</b><span class="l">${l}</span></div></div>`).join('');
     $('#cTrip').textContent = T.selected.length; $('#cFav').textContent = getFavs().length;
   }
 
@@ -96,7 +96,7 @@
       (!q || [d.name, d.country, d.blurb, ...d.cats, ...d.spots.map(s => s[0])].join(' ').toLowerCase().includes(q)));
     l = [...l].sort((a, b) => sort === 'low' ? dayCost(a) - dayCost(b) : sort === 'high' ? dayCost(b) - dayCost(a) : a.name.localeCompare(b.name));
     const favs = getFavs();
-    $('#exploreGrid').innerHTML = l.length ? l.map(d => cardHTML(d, { added: isAdded(d.id), fav: favs.includes(d.id) })).join('') : '<p class="empty" style="grid-column:1/-1">No destinations match. Try clearing a filter.</p>';
+    $('#exploreGrid').innerHTML = l.length ? l.map(d => cardHTML(d, { added: isAdded(d.id), fav: favs.includes(d.id) })).join('') : `<p class="empty" style="grid-column:1/-1">${ic('search')}No destinations match. Try clearing a filter.</p>`;
   }
 
   function renderTrip() {
@@ -108,10 +108,10 @@
     $('#allocNote').style.color = T.selected.length && a !== T.days ? 'var(--warn)' : '';
     $('#tripList').innerHTML = T.selected.length ? T.selected.map(s => {
       const d = dById(s.id);
-      return `<div class="dest-row" data-id="${d.id}"><div class="mini" style="${styleVars(d)}">${d.emoji}</div><div class="body">${esc(d.name)}<div class="muted">${esc(d.country)}</div></div>
-        <label class="sr" style="font-size:.78rem;color:var(--muted)">Days <input type="number" min="1" max="30" value="${s.nights}" data-nights="${d.id}" aria-label="Days in ${esc(d.name)}"></label>
-        <button class="icon-btn" data-remove="${d.id}" aria-label="Remove ${esc(d.name)}">✕</button></div>`;
-    }).join('') : '<p class="empty">No destinations yet. Head to <b>Explore</b> and add some.</p>';
+      return `<div class="dest-row" data-id="${d.id}"><div class="mini" style="${styleVars(d)}">${ic(d.icon)}</div><div class="body">${esc(d.name)}<div class="muted">${esc(d.country)}</div></div>
+        <label>Days <input type="number" min="1" max="30" value="${s.nights}" data-nights="${d.id}" aria-label="Days in ${esc(d.name)}"></label>
+        <button class="icon-btn" data-remove="${d.id}" aria-label="Remove ${esc(d.name)}">${ic('x')}</button></div>`;
+    }).join('') : `<p class="empty">${ic('map')}No destinations yet. Head to <b>Explore</b> and add some.</p>`;
   }
 
   function renderItinerary() {
@@ -119,26 +119,26 @@
     $('#dayTotal').textContent = `${T.days} days`;
     $('#dayTabs').innerHTML = Array.from({ length: T.days }, (_, i) => i + 1).map(d => `<button class="daytab ${d === T.day ? 'active' : ''}" data-day="${d}">Day ${d}<small>${esc(dayDate(d) || (dayDest(d)?.name ?? '—'))}</small></button>`).join('');
     const dd = dayDest(T.day);
-    $('#dayHead').textContent = `Day ${T.day}${dayDate(T.day) ? ' · ' + dayDate(T.day) : ''}${dd ? ' · ' + dd.name + ', ' + dd.country : ''}`;
+    $('#dayHead').innerHTML = `${ic('pin')} <b>Day ${T.day}</b>${dayDate(T.day) ? ' · ' + esc(dayDate(T.day)) : ''}${dd ? ' · ' + esc(dd.name) + ', ' + esc(dd.country) : ''}`;
     const spots = (dd ? [dd] : T.selected.map(s => dById(s.id))).flatMap(d => d.spots.map(s => ({ name: s[0], cost: s[1] }))).slice(0, 8);
-    $('#suggest').innerHTML = spots.length ? spots.map((s, i) => `<button class="chip" data-spot="${i}" type="button">＋ ${esc(s.name)}</button>`).join('') : '<span class="hint">Add a destination to get suggestions.</span>';
+    $('#suggest').innerHTML = spots.length ? spots.map((s, i) => `<button class="chip" data-spot="${i}" type="button">${ic('plus')} ${esc(s.name)}</button>`).join('') : '<span class="hint">Add a destination to get suggestions.</span>';
     $('#suggest').spots = spots;
     const acts = [...(T.itin[T.day] || [])].sort((a, b) => a.time.localeCompare(b.time));
-    $('#actList').innerHTML = acts.length ? acts.map(a => `<li class="act" data-id="${a.id}"><span class="time">${esc(a.time)}</span><span class="body">${esc(a.title)}</span><span class="cost">${a.cost ? money(a.cost) : 'Free'}</span><button class="icon-btn no-print" data-delact="${a.id}" aria-label="Delete activity">🗑️</button></li>`).join('') : '<li class="empty">Nothing planned for this day yet.</li>';
+    $('#actList').innerHTML = acts.length ? acts.map(a => `<li class="act" data-id="${a.id}"><span class="time">${esc(a.time)}</span><span class="body">${esc(a.title)}</span><span class="cost">${a.cost ? money(a.cost) : 'Free'}</span><button class="icon-btn no-print" data-delact="${a.id}" aria-label="Delete activity">${ic('trash')}</button></li>`).join('') : `<li class="empty">${ic('calendar')}Nothing planned for this day yet.</li>`;
   }
 
   function renderBudget() {
-    const { lines, total } = budget(), n = T.travelers, max = Math.max(1, ...lines.map(l => l[1]));
+    const { lines, total } = budget(), n = T.travelers, max = Math.max(1, ...lines.map(l => l[2]));
     $('#bTotal').textContent = money(total);
     $('#bPer').textContent = `${money(total / n)} per person · ${n} traveller${n > 1 ? 's' : ''} · ${T.days} days`;
     let st = '';
     if (T.budget) {
       const diff = T.budget - total;
-      st = diff >= 0 ? `<div class="status ok">✓ ${money(diff)} under your ${money(T.budget)} budget</div>` : `<div class="status bad">⚠ ${money(-diff)} over your ${money(T.budget)} budget</div>`;
-    } else st = '<div class="status warn">Set a budget limit in “My trip” to track your spending.</div>';
-    if (!T.selected.length) st += '<div class="status warn" style="margin-top:.5rem">Add destinations to include accommodation, food and transport.</div>';
+      st = diff >= 0 ? `<div class="status ok">${ic('check')} ${money(diff)} under your ${money(T.budget)} budget</div>` : `<div class="status bad">${ic('alert')} ${money(-diff)} over your ${money(T.budget)} budget</div>`;
+    } else st = `<div class="status warn">${ic('info')} Set a budget limit in “My trip” to track your spending.</div>`;
+    if (!T.selected.length) st += `<div class="status warn">${ic('info')} Add destinations to include accommodation, food and transport.</div>`;
     $('#bStatus').innerHTML = st;
-    $('#bBars').innerHTML = lines.map(([l, v, c]) => `<div class="bar"><div class="top"><span>${l}</span><span>${money(v)}</span></div><div class="track"><div class="fill" style="width:${v / max * 100}%;--c:${c}"></div></div></div>`).join('');
+    $('#bBars').innerHTML = lines.map(([i, l, v, c]) => `<div class="bar" style="--c:${c}"><div class="top"><span>${ic(i)} ${l}</span><span>${money(v)}</span></div><div class="track"><div class="fill" style="width:${v / max * 100}%"></div></div></div>`).join('');
   }
 
   function renderChecklist() {
@@ -146,12 +146,12 @@
     $('#clCount').textContent = `${done} of ${items.length} packed`;
     $('#clBar').style.width = items.length ? done / items.length * 100 + '%' : '0';
     const groups = {}; items.forEach(i => (groups[i.group] ||= []).push(i));
-    $('#clList').innerHTML = Object.entries(groups).map(([g, l]) => `<div class="cl-group"><h3>${esc(g)}</h3>${l.map(i => `<label class="cl-item ${T.done[i.key] ? 'done' : ''}"><input type="checkbox" data-key="${i.key}" ${T.done[i.key] ? 'checked' : ''}><span>${esc(i.text)}</span>${i.why ? `<em class="why" style="font-style:normal">${esc(i.why)}</em>` : ''}${i.custom ? `<button type="button" class="icon-btn" data-delcl="${i.key}" aria-label="Delete item">🗑️</button>` : ''}</label>`).join('')}</div>`).join('');
+    $('#clList').innerHTML = Object.entries(groups).map(([g, l]) => `<div class="cl-group"><h3>${esc(g)}</h3>${l.map(i => `<label class="cl-item ${T.done[i.key] ? 'done' : ''}"><input type="checkbox" data-key="${i.key}" ${T.done[i.key] ? 'checked' : ''}><span class="t">${esc(i.text)}</span>${i.why ? `<em class="why">${esc(i.why)}</em>` : ''}${i.custom ? `<button type="button" class="icon-btn" data-delcl="${i.key}" aria-label="Delete item">${ic('trash')}</button>` : ''}</label>`).join('')}</div>`).join('');
   }
 
   function renderFavs() {
     const f = getFavs().map(dById).filter(Boolean);
-    $('#favGrid').innerHTML = f.length ? f.map(d => cardHTML(d, { added: isAdded(d.id), fav: true })).join('') : '<p class="empty" style="grid-column:1/-1">No favourites yet. Tap the ♡ on any destination.</p>';
+    $('#favGrid').innerHTML = f.length ? f.map(d => cardHTML(d, { added: isAdded(d.id), fav: true })).join('') : `<p class="empty" style="grid-column:1/-1">${ic('heart')}No favourites yet. Tap the heart on any destination.</p>`;
   }
 
   function render() {
@@ -217,6 +217,8 @@
     history.replaceState(null, '', location.pathname);
     setTimeout(() => toast(first ? `${dById(want).name} added to your trip.` : 'Already in your trip.'), 300);
   }
+  const q0 = new URLSearchParams(location.search).get('q');
+  if (q0) { $('#q').value = q0.slice(0, 60); history.replaceState(null, '', location.pathname); }
   setTab(tab);
   initReveal();
 })();

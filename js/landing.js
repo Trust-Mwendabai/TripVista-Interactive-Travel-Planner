@@ -2,11 +2,11 @@
 (() => {
   const goAdd = id => { location.href = 'planner.html?add=' + encodeURIComponent(id); };
   const drawFeatured = () => {
-    $('#featured').innerHTML = DESTS.slice(0, 6).map(d => cardHTML(d, { fav: getFavs().includes(d.id) })).join('');
+    $('#featured').innerHTML = DESTS.slice(0, 8).map(d => cardHTML(d, { fav: getFavs().includes(d.id) })).join('');
   };
   drawFeatured();
   $('#statDest').textContent = DESTS.length;
-  $('#gallery-grid').innerHTML = DESTS.map(d => `<button class="gtile" data-info="${d.id}" style="${styleVars(d)}" aria-label="${esc(d.name)} details"><span aria-hidden="true">${d.emoji}</span><span class="name">${esc(d.name)}, ${esc(d.country)}</span></button>`).join('');
+  $('#gallery-grid').innerHTML = DESTS.map(d => `<button class="gtile" data-info="${d.id}" style="${styleVars(d)}" aria-label="${esc(d.name)} details">${ic(d.icon)}<span class="name">${esc(d.name)}<small>${esc(d.country)}</small></span></button>`).join('');
 
   document.addEventListener('click', e => {
     const fav = e.target.closest('[data-fav]');

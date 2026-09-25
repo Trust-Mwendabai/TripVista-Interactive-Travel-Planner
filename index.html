@@ -10,73 +10,80 @@
 </head>
 <body>
 <header class="nav">
-  <a class="logo" href="index.html"><span aria-hidden="true">✈</span> TripVista</a>
-  <button class="icon-btn burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+  <a class="logo" href="index.html"><span><svg class="i"><use href="#i-plane"/></svg></span> TripVista</a>
+  <button class="icon-btn burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><svg class="i"><use href="#i-menu"/></svg></button>
   <nav class="nav-links" id="navLinks" aria-label="Main">
     <a href="#destinations">Destinations</a>
     <a href="#how">How it works</a>
     <a href="#gallery">Gallery</a>
     <a href="#features">Features</a>
-    <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme">🌓</button>
-    <a class="btn primary sm" href="planner.html">Plan a trip</a>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle light or dark theme"><svg class="i"><use href="#i-contrast"/></svg></button>
+    <a class="btn primary sm" href="planner.html">Plan a trip <svg class="i"><use href="#i-arrow"/></svg></a>
   </nav>
 </header>
 <main>
   <section class="hero">
-    <div class="badge">🌍 Free · Private · No sign-up</div>
+    <div class="badge"><svg class="i"><use href="#i-shield"/></svg> Free · Private · No sign-up</div>
     <h1>Plan your next <em>adventure</em> in minutes.</h1>
     <p>Pick destinations, build a day-by-day itinerary, estimate costs and get a smart packing checklist — all in one beautiful planner.</p>
-    <a class="btn sunset" href="planner.html">Start planning →</a>
-    <a class="btn ghost" href="#destinations">Explore destinations</a>
+    <form class="searchbar" action="planner.html" role="search">
+      <div class="field-icon"><svg class="i"><use href="#i-search"/></svg><input type="search" name="q" placeholder="Search a city, country or activity…" aria-label="Search destinations"></div>
+      <button class="btn sunset">Search</button>
+    </form>
+    <div class="hero-cta">
+      <a class="btn ghost" href="planner.html">Start planning <svg class="i"><use href="#i-arrow"/></svg></a>
+      <a class="btn ghost" href="#destinations">Browse destinations</a>
+    </div>
     <div class="hero-stats">
-      <div><b id="statDest">12</b><span>Destinations</span></div>
-      <div><b>4</b><span>Planning tools</span></div>
-      <div><b>100%</b><span>Saved on your device</span></div>
+      <div class="hstat"><svg class="i"><use href="#i-globe"/></svg><div><b id="statDest">12</b><span>Destinations</span></div></div>
+      <div class="hstat"><svg class="i"><use href="#i-list-checks"/></svg><div><b>4</b><span>Planning tools</span></div></div>
+      <div class="hstat"><svg class="i"><use href="#i-shield"/></svg><div><b>100%</b><span>Saved on your device</span></div></div>
     </div>
   </section>
 
   <section class="section" id="destinations">
-    <div class="section-head reveal"><h2>Popular destinations</h2><p>Tap a card for details, save your favourites, or add it straight to your trip.</p></div>
+    <div class="section-head reveal"><span class="eyebrow">Discover</span><h2>Popular destinations</h2><p>Select a card for details, save your favourites, or add it straight to your trip.</p></div>
     <div class="dgrid" id="featured"></div>
   </section>
 
   <section class="section" id="how">
-    <div class="section-head reveal"><h2>How TripVista works</h2><p>From idea to ready-to-go in four simple steps.</p></div>
+    <div class="section-head reveal"><span class="eyebrow">Simple process</span><h2>How TripVista works</h2><p>From idea to ready-to-go in four steps.</p></div>
     <div class="steps">
-      <div class="step reveal"><div class="n">1</div><h3>Choose destinations</h3><p>Search and filter by type, budget and season, then add places to your trip.</p></div>
-      <div class="step reveal"><div class="n">2</div><h3>Build your itinerary</h3><p>Add activities to each day with times and costs.</p></div>
-      <div class="step reveal"><div class="n">3</div><h3>Estimate the budget</h3><p>See a live cost breakdown for your group and stay within your limit.</p></div>
-      <div class="step reveal"><div class="n">4</div><h3>Pack with confidence</h3><p>Get a checklist tailored to your destinations and trip length.</p></div>
+      <div class="step reveal"><span class="n">01</span><div class="ico"><svg class="i"><use href="#i-compass"/></svg></div><h3>Choose destinations</h3><p>Search and filter by type, budget and season, then add places to your trip.</p></div>
+      <div class="step reveal"><span class="n">02</span><div class="ico"><svg class="i"><use href="#i-calendar"/></svg></div><h3>Build your itinerary</h3><p>Add activities to each day with times and costs.</p></div>
+      <div class="step reveal"><span class="n">03</span><div class="ico"><svg class="i"><use href="#i-wallet"/></svg></div><h3>Estimate the budget</h3><p>See a live cost breakdown for your group and stay within your limit.</p></div>
+      <div class="step reveal"><span class="n">04</span><div class="ico"><svg class="i"><use href="#i-bag"/></svg></div><h3>Pack with confidence</h3><p>Get a checklist tailored to your destinations and trip length.</p></div>
     </div>
   </section>
 
   <section class="section" id="gallery">
-    <div class="section-head reveal"><h2>Destination gallery</h2><p>Get inspired. Select any tile to see highlights and estimated costs.</p></div>
+    <div class="section-head reveal"><span class="eyebrow">Inspiration</span><h2>Destination gallery</h2><p>Select any tile to see highlights and estimated costs.</p></div>
     <div class="gallery" id="gallery-grid"></div>
   </section>
 
   <section class="section" id="features">
-    <div class="section-head reveal"><h2>Everything a trip needs</h2></div>
+    <div class="section-head reveal"><span class="eyebrow">Features</span><h2>Everything a trip needs</h2></div>
     <div class="features">
-      <article class="feature reveal"><div class="ico">🗓️</div><h3>Daily itineraries</h3><p>Plan each day with timed activities, automatically sorted.</p></article>
-      <article class="feature reveal"><div class="ico">💰</div><h3>Budget calculator</h3><p>Flights, stay, food, transport and activities for the whole group.</p></article>
-      <article class="feature reveal"><div class="ico">❤️</div><h3>Favourites</h3><p>Save places you love and come back to them later.</p></article>
-      <article class="feature reveal"><div class="ico">🧳</div><h3>Smart checklist</h3><p>Packing items that adapt to beaches, cities, cold weather and more.</p></article>
-      <article class="feature reveal"><div class="ico">🔎</div><h3>Search &amp; filters</h3><p>Filter by category and daily budget, and sort by price or name.</p></article>
-      <article class="feature reveal"><div class="ico">🌗</div><h3>Light &amp; dark mode</h3><p>Comfortable on any screen, day or night, on any device.</p></article>
+      <article class="feature reveal"><div class="ico"><svg class="i"><use href="#i-calendar"/></svg></div><h3>Daily itineraries</h3><p>Plan each day with timed activities, automatically sorted.</p></article>
+      <article class="feature reveal"><div class="ico"><svg class="i"><use href="#i-wallet"/></svg></div><h3>Budget calculator</h3><p>Flights, stay, food, transport and activities for the whole group.</p></article>
+      <article class="feature reveal"><div class="ico"><svg class="i"><use href="#i-heart"/></svg></div><h3>Favourites</h3><p>Save places you love and come back to them later.</p></article>
+      <article class="feature reveal"><div class="ico"><svg class="i"><use href="#i-list-checks"/></svg></div><h3>Smart checklist</h3><p>Packing items that adapt to beaches, cities, cold weather and more.</p></article>
+      <article class="feature reveal"><div class="ico"><svg class="i"><use href="#i-sliders"/></svg></div><h3>Search &amp; filters</h3><p>Filter by category and daily budget, and sort by price or name.</p></article>
+      <article class="feature reveal"><div class="ico"><svg class="i"><use href="#i-contrast"/></svg></div><h3>Light &amp; dark mode</h3><p>Comfortable on any screen, day or night, on any device.</p></article>
     </div>
   </section>
 
   <section class="cta reveal">
     <h2>Where to next?</h2>
     <p>Your plan is saved in your browser, so you can come back and keep building.</p>
-    <a class="btn" href="planner.html">Open the trip planner →</a>
+    <a class="btn" href="planner.html">Open the trip planner <svg class="i"><use href="#i-arrow"/></svg></a>
   </section>
 </main>
 <footer class="site">
   <p>TripVista · Built with HTML5, CSS3 and JavaScript · Plans stored locally in your browser</p>
   <p><strong>John Malasha</strong> · SIN: 2512140773</p>
 </footer>
+<script src="js/icons.js"></script>
 <script src="js/data.js"></script>
 <script src="js/shared.js"></script>
 <script src="js/landing.js"></script>
